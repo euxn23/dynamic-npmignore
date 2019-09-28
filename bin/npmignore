@@ -1,0 +1,58 @@
+#!/usr/bin/env sh
+
+VERSION=$(node -pe "require('./package.json').version")
+
+help() {
+  echo <<- EOS
+  Usage:
+    $ npmignore : generate `.npmignore` aggregating {global,local} `.gitignore` and `.npmignorerc`
+    $ npmignore --init : initialize (rename `.npmignore` to `.npmignorerc`)
+EOS
+  exit 1
+}
+
+init() {
+  if [ ! -e .npmignorerc ]; then
+    if [ -e .npmignore ]; then
+      mv .npmignore .npmignorerc
+    else
+      echo -n > .npmignorerc
+    fi
+  fi
+
+  if [ ! -e .gitignore ]; then
+    echo '.npmignore' > .gitignore
+  fi
+
+  if !(cat .gitignore | grep .npmignore &>/dev/null); then
+    echo '.npmignore' >> .gitignore
+  fi
+}
+
+main() {
+  rm -f .npmignore
+  cat .gitignore `eval echo \`git config --global core.excludesfile\`` .npmignorerc > .npmignore
+}
+
+if [ $# -eq 0 ]; then
+  main
+  exit 0
+fi
+
+for OPT in "$@"
+do
+  case $OPT in
+    '-i'|'--init'|'init' )
+      init
+      exit 0
+      ;;
+    '-v'|'--version' )
+      echo $VERSION
+      exit 1
+      ;;
+    '-h'|'--help'|-*|* )
+      help
+      exit 1
+      ;;
+  esac
+done
