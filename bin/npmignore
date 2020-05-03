@@ -33,10 +33,10 @@ main() {
   rm -f .npmignore
   cat `eval echo \`git config --global core.excludesfile\`` > .npmignore
 
-  if [ ! -e .gitignore ]; then
+  if [ -e .gitignore ]; then
     cat .gitignore >> .npmignore
   fi
-  if [ ! -e .npmignorerc ]; then
+  if [ -e .npmignorerc ]; then
     cat .npmignorerc >> .npmignore
   fi
 }
