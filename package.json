@@ -1,6 +1,6 @@
 {
   "name": "meta-npmignore",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A zero dependency cli tool to generate .npmignore file dynamically, based on local and global gitignore config.",
   "main": "bin/npmignore",
   "bin": {

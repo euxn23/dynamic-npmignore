@@ -31,7 +31,14 @@ init() {
 
 main() {
   rm -f .npmignore
-  cat .gitignore `eval echo \`git config --global core.excludesfile\`` .npmignorerc > .npmignore
+  cat `eval echo \`git config --global core.excludesfile\`` > .npmignore
+
+  if [ ! -e .gitignore ]; then
+    cat .gitignore >> .npmignore
+  fi
+  if [ ! -e .npmignorerc ]; then
+    cat .npmignorerc >> .npmignore
+  fi
 }
 
 if [ $# -eq 0 ]; then
